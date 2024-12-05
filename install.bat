@@ -6,11 +6,19 @@ echo ====================================
 :: Check if Python is installed
 python --version >nul 2>&1
 if errorlevel 1 (
-    echo ERROR: Python is not installed!
-    echo Please install Python 3.8 or later from https://www.python.org/downloads/
-    echo Make sure to check "Add Python to PATH" during installation
-    pause
-    exit /b
+    echo Python not found. Installing Python 3.8...
+    
+    :: Download Python installer
+    curl -o python-3.8.10-amd64.exe https://www.python.org/ftp/python/3.8.10/python-3.8.10-amd64.exe
+    
+    :: Install Python silently with PATH option enabled
+    python-3.8.10-amd64.exe /quiet InstallAllUsers=1 PrependPath=1 Include_test=0
+    
+    :: Delete installer
+    del python-3.8.10-amd64.exe
+    
+    :: Refresh environment variables
+    call RefreshEnv.cmd
 )
 
 :: Create virtual environment if it doesn't exist
