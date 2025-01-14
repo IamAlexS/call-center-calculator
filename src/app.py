@@ -41,11 +41,29 @@ def main():
 
     # Lead Cost Tiers
     st.sidebar.header("Lead Cost Tiers")
+    st.sidebar.markdown("📊 Enter total volume thresholds and costs per lead")
+    
     cost_tiers = []
     for i in range(4):
         col1, col2 = st.sidebar.columns(2)
-        volume = col1.number_input(f"Volume {i+1}", value=7300*(2**i), key=f"v{i}")
-        cost = col2.number_input(f"Cost {i+1}", value=7+(3*i), key=f"c{i}")  # Starting at 7, increment by 3
+        volume = col1.number_input(
+            f"Up to leads", 
+            value=7300*(2**i), 
+            key=f"v{i}"
+        )
+        cost = col2.number_input(
+            f"Cost/lead ($)", 
+            value=7+(3*i), 
+            key=f"c{i}"
+        )
+        
+        # Simple range display
+        if i > 0:
+            prev_volume = cost_tiers[i-1]['volume']
+            st.sidebar.caption(f"${cost} per lead from {prev_volume:,} to {volume:,}")
+        else:
+            st.sidebar.caption(f"${cost} per lead from 0 to {volume:,}")
+            
         cost_tiers.append({'volume': volume, 'cost': cost})
 
     # Investment Analysis
